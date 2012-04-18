@@ -1,0 +1,38 @@
+[
+    {
+        "caption": "SymfonyCommander cache:clear (prod)",
+        "command": "symfony_commander_clear_cache_prod"
+    }
+    ,{
+        "caption": "SymfonyCommander cache:clear (dev)",
+        "command": "symfony_commander_clear_cache_dev"
+    }
+    ,{
+        "caption": "SymfonyCommander cache:warmup",
+        "command": "symfony_commander_cache_warmup"
+    }
+    ,{
+        "caption": "SymfonyCommander router:debug",
+        "command": "symfony_commander_router_debug"
+    }
+    ,{
+        "caption": "SymfonyCommander assets:install",
+        "command": "symfony_commander_assets_install"
+    }
+    ,{
+        "caption": "SymfonyCommander assets:install (Symlinks)",
+        "command": "symfony_commander_assets_install_symlinks"
+    }
+    ,{
+        "caption": "SymfonyCommander assetic:dump (with Args)",
+        "command": "symfony_commander_assetic_dump_arguments"
+    }
+	,{
+        "caption": "SymfonyCommander swiftmailer:spool:send",
+        "command": "symfony_commander_send_mail"
+    }
+    ,{
+        "caption": "SymfonyCommander swiftmailer:spool:send (with Args)",
+        "command": "symfony_commander_send_mail_arguments"
+    }
+]

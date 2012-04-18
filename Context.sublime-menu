@@ -1,0 +1,38 @@
+[{
+    "id": "symfonycommandermenu",
+    "caption": "SymfonyCommander",
+    "children": [
+        {
+            "caption": "Cache",
+            "id": "symfonycommandercachemenu",
+            "children" : [
+                {"caption": "Clear (Prod)", "command": "symfony_commander_clear_cache_prod"},
+                {"caption": "Clear (Dev)", "command": "symfony_commander_clear_cache_dev"},
+                {"caption": "Warmup", "command": "symfony_commander_cache_warmup"}
+            ]
+        }, {
+            "caption": "Router",
+            "id": "symfonycommanderroutermenu",
+            "children" : [
+                {"caption": "router:debug", "command": "symfony_commander_router_debug"}
+            ]
+        }, {
+            "caption": "Assets",
+            "id": "symfonycommanderassetsmenu",
+            "children" : [
+                {"caption": "assets:install", "command": "symfony_commander_assets_install"},
+                {"caption": "assets:install (Symlinks)", "command": "symfony_commander_assets_install_symlinks"},
+                {"caption": "assetic:dump (with Args)", "command": "symfony_commander_assetic_dump_arguments"}
+            ]
+        }, {
+            "caption": "Mail",
+            "id": "symfonycommandermailmenu",
+            "children" : [
+                {"caption": "swiftmailer:spool:send", "command": "symfony_commander_send_mail"},
+                {"caption": "swiftmailer:spool:send (with Args)", "command": "symfony_commander_send_mail_arguments"}
+            ]
+        }
+            
+            
+    ]
+}]

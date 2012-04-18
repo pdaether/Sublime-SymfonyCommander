@@ -1,0 +1,6 @@
+{
+	// if false, call "app/console" directly without explicit php binaray
+	// if set, use this command instead:
+	// 		e.g. "/usr/bin/php app/console" or "C:\php\php.exe app/console" or "php app/console"
+	"php_command": false
+}
