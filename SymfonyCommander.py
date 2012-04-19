@@ -1,3 +1,24 @@
+# MIT License**
+#
+# Copyright (c) 2012 Patrick Daether, public < at > pd-digital.de
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
 import os
 import os.path
 import subprocess
@@ -53,7 +74,7 @@ class SymfonyCommander(sublime_plugin.TextCommand):
         self.multi_line_output(value)
 
     def multi_line_output(self, value, panel_name='SymfonyCommander'):
-        # Create the output Panel and start edit
+        # Create the output Panel
         panel = self.view.window().get_output_panel(panel_name)
         panel.set_read_only(False)
         panel.set_syntax_file('Packages/Text/Plain text.tmLanguage')
@@ -105,7 +126,7 @@ class SymfonyCommanderSendMailCommand(SymfonyCommander):
         self.callSymfony('swiftmailer:spool:send')
 
 
-# Command to run node with arguments
+# Command to run with arguments
 class SymfonyCommanderSendMailArgumentsCommand(SymfonyCommander):
     def run(self, edit):
         sublime.active_window().show_input_panel("Arguments", "--message-limit=10 --time-limit=10", self.on_input, None, None)
@@ -117,7 +138,7 @@ class SymfonyCommanderSendMailArgumentsCommand(SymfonyCommander):
         self.callSymfony('swiftmailer:spool:send ' + message)
 
 
-# Command to run node with arguments
+# Command to run with arguments
 class SymfonyCommanderAsseticDumpArgumentsCommand(SymfonyCommander):
     def run(self, edit):
         sublime.active_window().show_input_panel("Arguments", "--env=dev --no-debug --watch --force --period=30", self.on_input, None, None)

@@ -1,6 +1,8 @@
-# Integration of the Symfony 2 console right into Sublime Text 2
+# SymfonyCommander
 
-This [Sublime Text 2](http://sublimetext.com/) package integrates the most common [Symfony 2](http://www.symfony.com) console commands right into your _lovly editor of choice &trade;_.
+**_Integration of the Symfony 2 console right into Sublime Text 2_**
+
+This [Sublime Text 2](http://sublimetext.com/) package integrates the most common [Symfony 2](http://www.symfony.com) console commands right into your _lovely editor of choice &trade;_.
 
 It provides the following features:
 
@@ -14,16 +16,16 @@ It provides the following features:
 More commands are on the way.
 If you want to be informed about new versions of this plugin just watch this repro on github or watch out for some [tweets](https://twitter.com/#!/pdaether).
 
-If you need some Symfony code snippets in addition to this package just install [sublime-symfony2](https://github.com/raulfraile/sublime-symfony2). It is a great package for speed up your Symfony 2 develoment as well.
+If you need some Symfony code snippets in addition to this package just install [sublime-symfony2](https://github.com/raulfraile/sublime-symfony2). It is a great package for speed up your Symfony 2 development as well.
 
 ## Usage
 
-### Command pallette
+### Command palette
 
 ![Command Palette](http://pdaether.github.com/images/command_palette.jpg "Command Palette")
 
 Open the Command Palette with the shortcut `Command+Shift+P` on OS X or `Control+Shift+P` otherwise.
-Alternativ you can open the Command Pallete in the menu (_Tools -> Command Palette..._).
+Alternative you can open the Command Palette in the menu (_Tools -> Command Palette..._).
 
 **Speedup tip:**
 
@@ -78,11 +80,11 @@ SymfonyCommander tries to find the Symfony `app/console` script automatically. T
 This works in most cases.
 
 Otherwise you have to tell SymfonyCommander where to find the console script on a project basis.
-To point SymfonyCommander to the root directory of your symfony installation you need to set this path in the Sublime Text Project file (_*.sublime-project_) under the _settings_-section.
+To point SymfonyCommander to the root directory of your Symfony installation you need to set this path in the Sublime Text Project file (_*.sublime-project_) under the _settings_-section.
 
 	"settings":{
 		"SymfonyCommander":{
-			"base_directory": "/www/htodcs/your-symfony-project/"
+			"base_directory": "/www/htdocs/your-symfony-project/"
 		}
 	}
 
