@@ -27,6 +27,7 @@ import sublime_plugin
 
 
 class SymfonyCommander(sublime_plugin.TextCommand):
+
     def callSymfony(self, command):
         project_settings = self.view.settings().get('SymfonyCommander', {})
         base_directory = ""
@@ -109,6 +110,11 @@ class SymfonyCommanderCacheWarmupCommand(SymfonyCommander):
 class SymfonyCommanderRouterDebugCommand(SymfonyCommander):
     def run(self, edit):
         self.callSymfony('router:debug')
+
+
+class SymfonyCommanderContainerDebugCommand(SymfonyCommander):
+    def run(self, edit):
+        self.callSymfony('container:debug')
 
 
 class SymfonyCommanderAssetsInstallCommand(SymfonyCommander):

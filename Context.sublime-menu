@@ -8,13 +8,15 @@
             "children" : [
                 {"caption": "Clear (Prod)", "command": "symfony_commander_clear_cache_prod"},
                 {"caption": "Clear (Dev)", "command": "symfony_commander_clear_cache_dev"},
+                { "caption": "-" },
                 {"caption": "Warmup", "command": "symfony_commander_cache_warmup"}
             ]
         }, {
-            "caption": "Router",
-            "id": "symfonycommanderroutermenu",
+            "caption": "Debug",
+            "id": "symfonycommanderdebugmenu",
             "children" : [
-                {"caption": "router:debug", "command": "symfony_commander_router_debug"}
+                {"caption": "router:debug", "command": "symfony_commander_router_debug"},
+                {"caption": "container:debug", "command": "symfony_commander_container_debug"}
             ]
         }, {
             "caption": "Assets",

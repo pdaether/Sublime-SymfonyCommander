@@ -11,6 +11,7 @@ It provides the following features:
 - Assetic: Dump all assets to the filesystem
 - Install bundles web assets under the public web directory
 - Display current routes for an application
+- Displays current services for an application
 - Send emails from the spool
 
 More commands are on the way.

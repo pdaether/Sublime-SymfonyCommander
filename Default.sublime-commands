@@ -16,6 +16,10 @@
         "command": "symfony_commander_router_debug"
     }
     ,{
+        "caption": "SymfonyCommander container:debug",
+        "command": "symfony_commander_container_debug"
+    }
+    ,{
         "caption": "SymfonyCommander assets:install",
         "command": "symfony_commander_assets_install"
     }
