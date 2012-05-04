@@ -13,6 +13,9 @@ It provides the following features:
 - Display current routes for an application
 - Displays current services for an application
 - Send emails from the spool
+- Doctrine: Clear result cache
+- Doctrine: Clear query cache
+- Doctrine: Clear meta cache
 
 More commands are on the way.
 If you want to be informed about new versions of this plugin just watch this repro on github or watch out for some [tweets](https://twitter.com/#!/pdaether).

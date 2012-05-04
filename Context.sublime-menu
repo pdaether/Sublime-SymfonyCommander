@@ -27,6 +27,18 @@
                 {"caption": "assetic:dump (with Args)", "command": "symfony_commander_assetic_dump_arguments"}
             ]
         }, {
+            "caption": "Doctrine",
+            "id": "symfonycommanderdoctrinemenu",
+            "children" : [
+                {"caption": "doctrine:cache:clear-result", "command": "symfony_commander_doct_clear_result"},
+                {"caption": "doctrine:cache:clear-query", "command": "symfony_commander_doct_clear_query"},
+                {"caption": "doctrine:cache:clear-metadata", "command": "symfony_commander_doct_clear_metadata"},
+                { "caption": "-" },
+                {"caption": "doctrine:cache:clear-result (with Args)", "command": "symfony_commander_doct_clear_result_arguments"},
+                { "caption": "-" },
+                {"caption": "doctrine:mapping:info", "command": "symfony_commander_doct_mapping_info"}
+            ]
+        }, {
             "caption": "Mail",
             "id": "symfonycommandermailmenu",
             "children" : [

@@ -39,4 +39,24 @@
         "caption": "SymfonyCommander swiftmailer:spool:send (with Args)",
         "command": "symfony_commander_send_mail_arguments"
     }
+    ,{
+        "caption": "SymfonyCommander doctrine:cache:clear-result",
+        "command": "symfony_commander_doct_clear_result"
+    }
+    ,{
+        "caption": "SymfonyCommander doctrine:cache:clear-result (with Args)",
+        "command": "symfony_commander_doct_clear_result-arguments"
+    }
+    ,{
+        "caption": "SymfonyCommander doctrine:cache:clear-query",
+        "command": "symfony_commander_doct_clear_query"
+    }
+    ,{
+        "caption": "SymfonyCommander doctrine:cache:clear-metadata",
+        "command": "symfony_commander_doct_clear_metadata"
+    }
+    ,{
+        "caption": "SymfonyCommander doctrine:mapping:info",
+        "command": "symfony_commander_doct_mapping_info"
+    }
 ]

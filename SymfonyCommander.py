@@ -117,6 +117,34 @@ class SymfonyCommanderContainerDebugCommand(SymfonyCommander):
         self.callSymfony('container:debug')
 
 
+class SymfonyCommanderDoctClearResult(SymfonyCommander):
+    def run(self, edit):
+        self.callSymfony('doctrine:cache:clear-result')
+
+
+class SymfonyCommanderDoctClearResultArguments(SymfonyCommander):
+    def run(self, edit):
+        sublime.active_window().show_input_panel("Arguments", "--id=*", self.on_input, None, None)
+
+    def on_input(self, message):
+        self.callSymfony('doctrine:cache:clear-result ' + message)
+
+
+class SymfonyCommanderDoctClearQuery(SymfonyCommander):
+    def run(self, edit):
+        self.callSymfony('doctrine:cache:clear-query')
+
+
+class SymfonyCommanderDoctClearMetadata(SymfonyCommander):
+    def run(self, edit):
+        self.callSymfony('doctrine:cache:clear-metadata')
+
+
+class SymfonyCommanderDoctMappingInfo(SymfonyCommander):
+    def run(self, edit):
+        self.callSymfony('doctrine:mapping:info')
+
+
 class SymfonyCommanderAssetsInstallCommand(SymfonyCommander):
     def run(self, edit):
         self.callSymfony('assets:install web')
@@ -138,9 +166,6 @@ class SymfonyCommanderSendMailArgumentsCommand(SymfonyCommander):
         sublime.active_window().show_input_panel("Arguments", "--message-limit=10 --time-limit=10", self.on_input, None, None)
 
     def on_input(self, message):
-        command = message.split()
-        command.insert(0, self.view.file_name())
-        command.insert(0, 'node')
         self.callSymfony('swiftmailer:spool:send ' + message)
 
 
@@ -150,7 +175,4 @@ class SymfonyCommanderAsseticDumpArgumentsCommand(SymfonyCommander):
         sublime.active_window().show_input_panel("Arguments", "--env=dev --no-debug --watch --force --period=30", self.on_input, None, None)
 
     def on_input(self, message):
-        command = message.split()
-        command.insert(0, self.view.file_name())
-        command.insert(0, 'node')
         self.callSymfony('assetic:dump ' + message)
