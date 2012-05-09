@@ -46,7 +46,7 @@ For example if you type something short like `sccl` you get directly to the _Sym
 
 SymfonyCommader has some shortcuts defined:
 
- - To switch between a Controller Action an the corresponding Template you can use `ctrl+alt+s` on Windows and Linux or `alt+super+s` on OS X. At the moment this only works, if the names of your Action an the corresponding template are matching the naming conventions and you ar using Twig (for example _indexAction_ and _index.html.twig_).
+ - To switch between a Controller Action an the corresponding Template you can use `ctrl+alt+s` on Windows and Linux or `alt+super+s` on OS X. At the moment this only works, if the names of your Action an the corresponding template are matching the naming conventions and you are using Twig (for example _indexAction_ and _index.html.twig_).
  - To clear the cache in the develpment enviroment just type  `ctrl+alt+c` on Windows and Linux or `alt+super+c` on OS X.
 
  You can of cause change or add shortcuts in the user settings.
