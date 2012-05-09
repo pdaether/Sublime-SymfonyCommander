@@ -1,0 +1,6 @@
+[
+	{
+		"keys": ["alt+super+s"], "command": "symfony_commander_switch_file",
+		"keys": ["alt+super+c"], "command": "symfony_commander_clear_cache_dev"
+	}
+]

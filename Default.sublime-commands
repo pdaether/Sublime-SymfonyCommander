@@ -59,4 +59,8 @@
         "caption": "SymfonyCommander doctrine:mapping:info",
         "command": "symfony_commander_doct_mapping_info"
     }
+    ,{
+        "caption": "SymfonyCommander Switch Action <-> Template",
+        "command": "symfony_commander_switch_file"
+    }
 ]

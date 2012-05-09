@@ -24,6 +24,10 @@ import os.path
 import subprocess
 import sublime
 import sublime_plugin
+import re
+
+# Some global vars:
+jump_to_action = ''
 
 
 class SymfonyCommander(sublime_plugin.TextCommand):
@@ -176,3 +180,59 @@ class SymfonyCommanderAsseticDumpArgumentsCommand(SymfonyCommander):
 
     def on_input(self, message):
         self.callSymfony('assetic:dump ' + message)
+
+
+class SymfonyCommanderSwitchFileCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        global jump_to_action
+        file = self.view.file_name()
+        file_match = re.search(r'(.+)[/\\](.+)Controller.php', file)
+        if file_match:
+            folder = file_match.group(1)
+            file = file_match.group(2)
+            action = self.get_current_function(self.view)
+            if action:
+                a = re.search('(\w+)Action', action).group(1)
+                self.view.window().open_file(folder + os.sep + '..' + os.sep + 'Resources' + os.sep + 'views' + os.sep + file + os.sep + a + '.html.twig')
+        elif re.search(r'(.+)[/\\](.+).html.twig', file):
+            file_match = re.search(r'(.+)[/\\](.+)[/\\](.+).html.twig', file)
+            folder = file_match.group(1)
+            controller = file_match.group(2)
+            action = file_match.group(3)
+            self.view.window().open_file(folder + os.sep + '..' + os.sep + '..' + os.sep + 'Controller' + os.sep + controller + 'Controller.php')
+            jump_to_action = action
+        else:
+            sublime.status_message('Cannot find the correct file, sorry!' + file)
+
+    def get_current_function(self, view):
+        sel = view.sel()[0]
+        functionRegs = view.find_by_selector('entity.name.function')
+        cf = None
+        for r in reversed(functionRegs):
+            if r.a < sel.a:
+                cf = view.substr(r)
+                break
+        return cf
+
+    def output(self, value):
+        self.multi_line_output(value)
+
+    def multi_line_output(self, value, panel_name='SymfonyCommander'):
+        # Create the output Panel
+        panel = self.view.window().get_output_panel(panel_name)
+        panel.set_read_only(False)
+        panel.set_syntax_file('Packages/Text/Plain text.tmLanguage')
+        edit = panel.begin_edit()
+        panel.insert(edit, panel.size(), value)
+        panel.end_edit(edit)
+        panel.set_read_only(True)
+        self.view.window().run_command("show_panel", {"panel": "output." + panel_name})
+
+
+class SymfonyEvent(sublime_plugin.EventListener):
+    def on_load(self, view):
+        global jump_to_action
+        if jump_to_action:
+            sel = view.find(jump_to_action + "Action", 0)
+            view.show(sel)
+            jump_to_action = ''

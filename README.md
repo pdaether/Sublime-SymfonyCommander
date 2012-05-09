@@ -3,9 +3,11 @@
 **_Integration of the Symfony 2 console right into Sublime Text 2_**
 
 This [Sublime Text 2](http://sublimetext.com/) package integrates the most common [Symfony 2](http://www.symfony.com) console commands right into your _lovely editor of choice &trade;_.
+Additional you get some great little helpers for writing Symfony2 code.
 
 It provides the following features:
 
+- Switching between Template and the corresponding Controller/Action
 - Clear the cache
 - Warmup an empty cache
 - Assetic: Dump all assets to the filesystem
@@ -31,7 +33,7 @@ If you need some Symfony code snippets in addition to this package just install 
 Open the Command Palette with the shortcut `Command+Shift+P` on OS X or `Control+Shift+P` otherwise.
 Alternative you can open the Command Palette in the menu (_Tools -> Command Palette..._).
 
-**Speedup tip:**
+**Speed up tip:**
 
 You don't need to type the complete command (`SymfonyCommander...`) in the Command Palette to get to to the right command.
 For example if you type something short like `sccl` you get directly to the _SymfonyCommander cache:clear_ commands.
@@ -40,6 +42,14 @@ For example if you type something short like `sccl` you get directly to the _Sym
 
 ![Contextmenu](http://pdaether.github.com/images/contextmenu.jpg "Contextmenu")
 
+### Shortcuts
+
+SymfonyCommader has some shortcuts defined:
+
+ - To switch between a Controller Action an the corresponding Template you can use `ctrl+alt+s` on Windows and Linux or `alt+super+s` on OS X. At the moment this only works, if the names of your Action an the corresponding template are matching the naming conventions and you ar using Twig (for example _indexAction_ and _index.html.twig_).
+ - To clear the cache in the develpment enviroment just type  `ctrl+alt+c` on Windows and Linux or `alt+super+c` on OS X.
+
+ You can of cause change or add shortcuts in the user settings.
 
 ## Install
 
@@ -91,6 +101,13 @@ To point SymfonyCommander to the root directory of your Symfony installation you
 			"base_directory": "/www/htdocs/your-symfony-project/"
 		}
 	}
+
+## Changelog
+
+- **2012-05-09:** Added function to switch between Action and corresponding template file
+- **2012-05-04:** New features: Clear Doctrine caches an show mapping info
+- **2012-05-03:** Added container:debug as a command
+- **2012-04-18:** First published Version
 
 
 ## License
