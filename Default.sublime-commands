@@ -45,7 +45,7 @@
     }
     ,{
         "caption": "SymfonyCommander doctrine:cache:clear-result (with Args)",
-        "command": "symfony_commander_doct_clear_result-arguments"
+        "command": "symfony_commander_doct_clear_result_arguments"
     }
     ,{
         "caption": "SymfonyCommander doctrine:cache:clear-query",
