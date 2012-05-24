@@ -8,6 +8,7 @@ Additional you get some great little helpers for writing Symfony2 code.
 It provides the following features:
 
 - Switching between Template and the corresponding Controller/Action
+- Autocompletion for routing and service names
 - Clear the cache
 - Warmup an empty cache
 - Assetic: Dump all assets to the filesystem
@@ -24,9 +25,34 @@ If you want to be informed about new versions of this plugin just watch this rep
 
 If you need some Symfony code snippets in addition to this package just install [sublime-symfony2](https://github.com/raulfraile/sublime-symfony2). It is a great package for speed up your Symfony 2 development as well.
 
+## Changelog
+
+**2012-05-24:** 
+
+- Restructuring and cleanup some code.
+- Added autocompletion for routing and service names.
+- Fixed wrong command name (thanks to @iamthes)
+- Fixed Shortkey bug
+
+**2012-05-09:** 
+
+- Added function to switch between Action and corresponding template file
+
+**2012-05-04:** 
+
+- New features: Clear Doctrine caches an show mapping info
+
+**2012-05-03:** 
+
+- Added container:debug as a command
+
+**2012-04-18:** 
+
+- First published Version
+
 ## Usage
 
-### Command palette
+### Command Palette
 
 ![Command Palette](http://pdaether.github.com/images/command_palette.jpg "Command Palette")
 
@@ -38,7 +64,7 @@ Alternative you can open the Command Palette in the menu (_Tools -> Command Pale
 You don't need to type the complete command (`SymfonyCommander...`) in the Command Palette to get to to the right command.
 For example if you type something short like `sccl` you get directly to the _SymfonyCommander cache:clear_ commands.
 
-### Call the Symfony commands through the contextmenu of an file.
+### Call the Symfony commands through the context menu of an file.
 
 ![Contextmenu](http://pdaether.github.com/images/contextmenu.jpg "Contextmenu")
 
@@ -47,9 +73,22 @@ For example if you type something short like `sccl` you get directly to the _Sym
 SymfonyCommader has some shortcuts defined:
 
  - To switch between a Controller Action an the corresponding Template you can use `ctrl+alt+s` on Windows and Linux or `alt+super+s` on OS X. At the moment this only works, if the names of your Action an the corresponding template are matching the naming conventions and you are using Twig (for example _indexAction_ and _index.html.twig_).
- - To clear the cache in the develpment enviroment just type  `ctrl+alt+c` on Windows and Linux or `alt+super+c` on OS X.
+ - To clear the cache in the development environment just type  `ctrl+alt+c` on Windows and Linux or `alt+super+c` on OS X.
 
  You can of cause change or add shortcuts in the user settings.
+
+### Autocompletion
+
+ With SymfonyCommander you get autocompletion for routes and service names while you are typing.
+
+ In addition, there are two commands `SymfonyCommander Select Route` and `SymfonyCommander Select Service` in the Command Palette for selecting an entry with more Infos:
+
+![Select a service](http://pdaether.github.com/images/select_a_container.jpg "Select a service")
+
+![Select a route](http://pdaether.github.com/images/select_a_route.jpg "Select a route")
+
+**Info:** For performance reasons the routes and service names are cached internally.
+To flush the cache just call the command `SymfonyCommander Flush Cache` over the Command Palette.
 
 ## Install
 
@@ -101,13 +140,6 @@ To point SymfonyCommander to the root directory of your Symfony installation you
 			"base_directory": "/www/htdocs/your-symfony-project/"
 		}
 	}
-
-## Changelog
-
-- **2012-05-09:** Added function to switch between Action and corresponding template file
-- **2012-05-04:** New features: Clear Doctrine caches an show mapping info
-- **2012-05-03:** Added container:debug as a command
-- **2012-04-18:** First published Version
 
 
 ## License

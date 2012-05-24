@@ -6,44 +6,44 @@
             "caption": "Cache",
             "id": "symfonycommandercachemenu",
             "children" : [
-                {"caption": "Clear (Prod)", "command": "symfony_commander_clear_cache_prod"},
-                {"caption": "Clear (Dev)", "command": "symfony_commander_clear_cache_dev"},
+                {"caption": "Clear (Prod)", "command": "symfony_commander_execute", "args": {"command": "cache:clear --env=prod"}},
+                {"caption": "Clear (Dev)", "command": "symfony_commander_execute", "args": {"command": "cache:clear --env=dev"}},
                 { "caption": "-" },
-                {"caption": "Warmup", "command": "symfony_commander_cache_warmup"}
+                {"caption": "Warmup", "command": "symfony_commander_execute", "args": {"command": "cache:warmup"}}
             ]
         }, {
             "caption": "Debug",
             "id": "symfonycommanderdebugmenu",
             "children" : [
-                {"caption": "router:debug", "command": "symfony_commander_router_debug"},
-                {"caption": "container:debug", "command": "symfony_commander_container_debug"}
+                {"caption": "router:debug", "command": "symfony_commander_execute", "args": {"command": "router:debug"}},
+                {"caption": "container:debug", "command": "symfony_commander_execute", "args": {"command": "container:debug"}}
             ]
         }, {
             "caption": "Assets",
             "id": "symfonycommanderassetsmenu",
             "children" : [
-                {"caption": "assets:install", "command": "symfony_commander_assets_install"},
-                {"caption": "assets:install (Symlinks)", "command": "symfony_commander_assets_install_symlinks"},
+                {"caption": "assets:install", "command": "symfony_commander_execute", "args": {"command": "assets:install web"}},
+                {"caption": "assets:install (Symlinks)", "command": "symfony_commander_execute", "args": {"command": "assets:install --symlink web"}},
                 {"caption": "assetic:dump (with Args)", "command": "symfony_commander_assetic_dump_arguments"}
             ]
         }, {
             "caption": "Doctrine",
             "id": "symfonycommanderdoctrinemenu",
             "children" : [
-                {"caption": "doctrine:cache:clear-result", "command": "symfony_commander_doct_clear_result"},
-                {"caption": "doctrine:cache:clear-query", "command": "symfony_commander_doct_clear_query"},
-                {"caption": "doctrine:cache:clear-metadata", "command": "symfony_commander_doct_clear_metadata"},
+                {"caption": "doctrine:cache:clear-result", "command": "symfony_commander_execute", "args": {"command": "doctrine:cache:clear-result"}},
+                {"caption": "doctrine:cache:clear-query", "command": "symfony_commander_execute", "args": {"command": "doctrine:cache:clear-query"}},
+                {"caption": "doctrine:cache:clear-metadata", "command": "symfony_commander_execute", "args": {"command": "doctrine:cache:clear-metadata"}},
                 { "caption": "-" },
-                {"caption": "doctrine:cache:clear-result (with Args)", "command": "symfony_commander_doct_clear_result_arguments"},
+                {"caption": "doctrine:cache:clear-result (with Args)", "command": "symfony_commander_execute_arguments", "args": {"command": "doctrine:cache:clear-result", "arguments": "--id=*"}},
                 { "caption": "-" },
-                {"caption": "doctrine:mapping:info", "command": "symfony_commander_doct_mapping_info"}
+                {"caption": "doctrine:mapping:info", "command": "symfony_commander_execute", "args": {"command": "doctrine:mapping:info"}}
             ]
         }, {
             "caption": "Mail",
             "id": "symfonycommandermailmenu",
             "children" : [
-                {"caption": "swiftmailer:spool:send", "command": "symfony_commander_send_mail"},
-                {"caption": "swiftmailer:spool:send (with Args)", "command": "symfony_commander_send_mail_arguments"}
+                {"caption": "swiftmailer:spool:send", "command": "symfony_commander_execute", "args": {"command": "swiftmailer:spool:send"}},
+                {"caption": "swiftmailer:spool:send (with Args)", "command": "symfony_commander_execute_arguments", "args": {"command": "swiftmailer:spool:send", "arguments": "--message-limit=10 --time-limit=10"}}
             ]
         }
             

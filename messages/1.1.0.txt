@@ -1,0 +1,13 @@
+Version 1.1.0
+--------------
+
+This release adds the following features and bugfixes:
+
+NEW FEATURES:
+Autocompletion for routing and service names.
+
+
+CHANGES/FIXES:
+- Restructuring and cleanup some code.
+- Fixed wrong command name (thanks to @iamthes)
+- Fixed Shortkey bug

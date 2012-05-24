@@ -30,9 +30,12 @@ import re
 jump_to_action = ''
 
 
-class SymfonyCommander(sublime_plugin.TextCommand):
+class SymfonyCommanderBase:
 
-    def callSymfony(self, command):
+    routes = []
+    containers = []
+
+    def callSymfony(self, command, quiet=False):
         project_settings = self.view.settings().get('SymfonyCommander', {})
         base_directory = ""
         if project_settings:
@@ -57,7 +60,8 @@ class SymfonyCommander(sublime_plugin.TextCommand):
                     if dir_name == old_dir:
                         reached_end = True
         if not base_directory:
-            self.output("Can't find the root directory of the symfony project. Please have a look at the README. You can find it here: https://github.com/pdaether/Sublime-SymfonyCommander")
+            if not quiet:
+                self.output("Can't find the root directory of the symfony project. Please have a look at the README. You can find it here: https://github.com/pdaether/Sublime-SymfonyCommander")
             return
         os.chdir(base_directory)
         # CMD:
@@ -69,11 +73,45 @@ class SymfonyCommander(sublime_plugin.TextCommand):
             command = php_command + " app/console " + command
         result, e = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, cwd=base_directory).communicate()
         if e:
-            self.output(e)
+            return e
         else:
-            if not result:
+            if not result and not quiet:
                 result = "Finished " + command
-            self.output(result)
+            return result
+
+    def loadRoutes(self, force=False):
+        if not force and len(SymfonyCommanderBase.routes) > 0:
+            return
+        routes_string = self.callSymfony('router:debug', True)
+        if not routes_string:
+            return
+        lines = routes_string.splitlines()
+        SymfonyCommanderBase.route_info = []
+        SymfonyCommanderBase.routes = []
+        for idx, val in enumerate(lines):
+            if not val.startswith('Name') and not val.startswith('[router]'):
+                route_name, restwords = val.split(' ', 1)
+                SymfonyCommanderBase.route_info.append([route_name, restwords.strip()])
+                SymfonyCommanderBase.routes.append(route_name)
+
+    def loadContainer(self, force=False):
+        if not force and len(SymfonyCommanderBase.containers) > 0:
+            return
+        container_string = self.callSymfony('container:debug', True)
+        if not container_string:
+            return
+        lines = container_string.splitlines()
+        SymfonyCommanderBase.container_info = []
+        SymfonyCommanderBase.containers = []
+        for idx, val in enumerate(lines):
+            if not val.startswith('Name') and not val.startswith('[container]'):
+                container_name, restwords = val.split(' ', 1)
+                SymfonyCommanderBase.container_info.append([container_name, restwords.strip()])
+                SymfonyCommanderBase.containers.append(container_name)
+
+    def clearCache(self):
+        SymfonyCommanderBase.containers = []
+        SymfonyCommanderBase.routes = []
 
     def output(self, value):
         self.multi_line_output(value)
@@ -90,87 +128,37 @@ class SymfonyCommander(sublime_plugin.TextCommand):
         self.view.window().run_command("show_panel", {"panel": "output." + panel_name})
 
 
-# Clear Cache
+class SymfonyCommander(SymfonyCommanderBase, sublime_plugin.TextCommand):
+
+    def injectText(self, edit, text):
+        for r in self.view.sel():
+            if r.size() > 0:
+                self.view.replace(edit, r, text)
+            else:
+                self.view.insert(edit, r.begin(), text)
+
+
 class SymfonyCommanderClearCacheCommand(SymfonyCommander):
     def run(self, edit):
-        self.callSymfony('cache:clear')
+        self.clearCache()
 
 
-class SymfonyCommanderClearCacheProdCommand(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('cache:clear --env=prod')
+class SymfonyCommanderExecuteCommand(SymfonyCommander):
+    def run(self, edit, command):
+        result = self.callSymfony(command)
+        if result:
+            self.output(result)
 
 
-class SymfonyCommanderClearCacheDevCommand(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('cache:clear --env=dev')
-
-
-class SymfonyCommanderCacheWarmupCommand(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('cache:warmup')
-
-
-class SymfonyCommanderRouterDebugCommand(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('router:debug')
-
-
-class SymfonyCommanderContainerDebugCommand(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('container:debug')
-
-
-class SymfonyCommanderDoctClearResult(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('doctrine:cache:clear-result')
-
-
-class SymfonyCommanderDoctClearResultArguments(SymfonyCommander):
-    def run(self, edit):
-        sublime.active_window().show_input_panel("Arguments", "--id=*", self.on_input, None, None)
+class SymfonyCommanderExecuteArgumentsCommand(SymfonyCommander):
+    def run(self, edit, command, arguments):
+        self.command = command
+        sublime.active_window().show_input_panel("Arguments", arguments, self.on_input, None, None)
 
     def on_input(self, message):
-        self.callSymfony('doctrine:cache:clear-result ' + message)
-
-
-class SymfonyCommanderDoctClearQuery(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('doctrine:cache:clear-query')
-
-
-class SymfonyCommanderDoctClearMetadata(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('doctrine:cache:clear-metadata')
-
-
-class SymfonyCommanderDoctMappingInfo(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('doctrine:mapping:info')
-
-
-class SymfonyCommanderAssetsInstallCommand(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('assets:install web')
-
-
-class SymfonyCommanderAssetsInstallSymlinksCommand(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('assets:install --symlink web')
-
-
-class SymfonyCommanderSendMailCommand(SymfonyCommander):
-    def run(self, edit):
-        self.callSymfony('swiftmailer:spool:send')
-
-
-# Command to run with arguments
-class SymfonyCommanderSendMailArgumentsCommand(SymfonyCommander):
-    def run(self, edit):
-        sublime.active_window().show_input_panel("Arguments", "--message-limit=10 --time-limit=10", self.on_input, None, None)
-
-    def on_input(self, message):
-        self.callSymfony('swiftmailer:spool:send ' + message)
+        result = self.callSymfony(self.command + ' ' + message)
+        if result:
+            self.output(result)
 
 
 # Command to run with arguments
@@ -179,10 +167,36 @@ class SymfonyCommanderAsseticDumpArgumentsCommand(SymfonyCommander):
         sublime.active_window().show_input_panel("Arguments", "--env=dev --no-debug --watch --force --period=30", self.on_input, None, None)
 
     def on_input(self, message):
-        self.callSymfony('assetic:dump ' + message)
+        self.output(self.callSymfony('assetic:dump ' + message))
 
 
-class SymfonyCommanderSwitchFileCommand(sublime_plugin.TextCommand):
+class SymfonyCommanderSelectRouteCommand(SymfonyCommander, sublime_plugin.WindowCommand):
+    def run(self, edit):
+
+        self.loadRoutes()
+
+        def on_select_route(num):
+            if num != -1:
+                route_name = SymfonyCommanderBase.route_info[num][0]
+                self.injectText(edit, route_name)
+
+        self.view.window().show_quick_panel(SymfonyCommanderBase.route_info, on_select_route, sublime.MONOSPACE_FONT)
+
+
+class SymfonyCommanderSelectContainerCommand(SymfonyCommander, sublime_plugin.WindowCommand):
+    def run(self, edit):
+
+        self.loadContainer()
+
+        def on_select_container(num):
+            if num != -1:
+                container_name = SymfonyCommanderBase.container_info[num][0]
+                self.injectText(edit, container_name)
+
+        self.view.window().show_quick_panel(SymfonyCommanderBase.container_info, on_select_container, sublime.MONOSPACE_FONT)
+
+
+class SymfonyCommanderSwitchFileCommand(SymfonyCommander, sublime_plugin.TextCommand):
     def run(self, edit):
         global jump_to_action
         file = self.view.file_name()
@@ -214,25 +228,34 @@ class SymfonyCommanderSwitchFileCommand(sublime_plugin.TextCommand):
                 break
         return cf
 
-    def output(self, value):
-        self.multi_line_output(value)
 
-    def multi_line_output(self, value, panel_name='SymfonyCommander'):
-        # Create the output Panel
-        panel = self.view.window().get_output_panel(panel_name)
-        panel.set_read_only(False)
-        panel.set_syntax_file('Packages/Text/Plain text.tmLanguage')
-        edit = panel.begin_edit()
-        panel.insert(edit, panel.size(), value)
-        panel.end_edit(edit)
-        panel.set_read_only(True)
-        self.view.window().run_command("show_panel", {"panel": "output." + panel_name})
-
-
-class SymfonyEvent(sublime_plugin.EventListener):
+class SymfonyEvent(sublime_plugin.EventListener, SymfonyCommanderBase):
     def on_load(self, view):
         global jump_to_action
         if jump_to_action:
             sel = view.find(jump_to_action + "Action", 0)
             view.show(sel)
             jump_to_action = ''
+
+
+class SymfonyCommanderAutocomplete(sublime_plugin.EventListener, SymfonyCommanderBase):
+
+    def on_query_completions(self, view, prefix, locations):
+        self.view = view
+
+        # only complete single line/selection
+        if len(locations) != 1:
+            return []
+
+        self.loadRoutes()
+        self.loadContainer()
+
+        snippets = []
+
+        for val in SymfonyCommanderBase.routes:
+            snippets.append((val, val))
+
+        for val in SymfonyCommanderBase.containers:
+            snippets.append((val, val))
+
+        return snippets

@@ -1,31 +1,52 @@
 [
     {
         "caption": "SymfonyCommander cache:clear (prod)",
-        "command": "symfony_commander_clear_cache_prod"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "cache:clear --env=prod"
+        }
     }
     ,{
         "caption": "SymfonyCommander cache:clear (dev)",
-        "command": "symfony_commander_clear_cache_dev"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "cache:clear --env=dev"
+        }
     }
     ,{
         "caption": "SymfonyCommander cache:warmup",
-        "command": "symfony_commander_cache_warmup"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "cache:warmup"
+        }
     }
     ,{
         "caption": "SymfonyCommander router:debug",
-        "command": "symfony_commander_router_debug"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "router:debug"
+        }
     }
     ,{
         "caption": "SymfonyCommander container:debug",
-        "command": "symfony_commander_container_debug"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "container:debug"
+        }
     }
     ,{
         "caption": "SymfonyCommander assets:install",
-        "command": "symfony_commander_assets_install"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "assets:install web"
+        }
     }
     ,{
         "caption": "SymfonyCommander assets:install (Symlinks)",
-        "command": "symfony_commander_assets_install_symlinks"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "assets:install --symlink web"
+        }
     }
     ,{
         "caption": "SymfonyCommander assetic:dump (with Args)",
@@ -33,34 +54,69 @@
     }
 	,{
         "caption": "SymfonyCommander swiftmailer:spool:send",
-        "command": "symfony_commander_send_mail"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "swiftmailer:spool:send"
+        }
     }
     ,{
         "caption": "SymfonyCommander swiftmailer:spool:send (with Args)",
-        "command": "symfony_commander_send_mail_arguments"
+        "command": "symfony_commander_execute_arguments",
+        "args": {
+            "command": "swiftmailer:spool:send",
+            "arguments": "--message-limit=10 --time-limit=10"
+        }
     }
     ,{
         "caption": "SymfonyCommander doctrine:cache:clear-result",
-        "command": "symfony_commander_doct_clear_result"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "doctrine:cache:clear-result"
+        }
     }
     ,{
         "caption": "SymfonyCommander doctrine:cache:clear-result (with Args)",
-        "command": "symfony_commander_doct_clear_result-arguments"
+        "command": "symfony_commander_execute_arguments",
+        "args": {
+            "command": "doctrine:cache:clear-result",
+            "arguments": "--id=*"
+        }
     }
     ,{
         "caption": "SymfonyCommander doctrine:cache:clear-query",
-        "command": "symfony_commander_doct_clear_query"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "doctrine:cache:clear-query"
+        }
     }
     ,{
         "caption": "SymfonyCommander doctrine:cache:clear-metadata",
-        "command": "symfony_commander_doct_clear_metadata"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "doctrine:cache:clear-metadata"
+        }
     }
     ,{
         "caption": "SymfonyCommander doctrine:mapping:info",
-        "command": "symfony_commander_doct_mapping_info"
+        "command": "symfony_commander_execute",
+        "args": {
+            "command": "doctrine:mapping:info"
+        }
     }
     ,{
         "caption": "SymfonyCommander Switch Action <-> Template",
         "command": "symfony_commander_switch_file"
+    }
+    ,{
+        "caption": "SymfonyCommander Select Route",
+        "command": "symfony_commander_select_route"
+    }
+    ,{
+        "caption": "SymfonyCommander Select Service",
+        "command": "symfony_commander_select_container"
+    }
+    ,{
+        "caption": "SymfonyCommander Flush Cache",
+        "command": "symfony_commander_clear_cache"
     }
 ]
