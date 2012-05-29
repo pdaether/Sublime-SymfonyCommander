@@ -25,6 +25,7 @@ import subprocess
 import sublime
 import sublime_plugin
 import re
+import webbrowser
 
 # Some global vars:
 jump_to_action = ''
@@ -32,15 +33,32 @@ jump_to_action = ''
 
 class SymfonyCommanderBase:
 
+    base_directory = ''
+    api_search_version = 'master'  # or somthing like v2.0.14 ...
+    doc_search_version = 'master'  # or  2.0
+
     routes = []
     containers = []
 
+    symfony_api_url = 'http://api.symfony.com/{v}/index.html?q={s}&src=SymfonyCommander'
+    symfony_doc_url = 'http://symfony.com/search?version={v}&q={s}&src=SymfonyCommander'
+
+    def loadSettings(self):
+        if self.view:
+            project_settings = self.view.settings().get('SymfonyCommander', {})
+            if project_settings:
+                self.base_directory = project_settings.get('base_directory')
+
+        s = sublime.load_settings("SymfonyCommander.sublime-settings")
+        self.php_command = s.get('php_command')
+        if s.get('api_search_version'):
+            self.api_search_version = s.get('api_search_version')
+        if s.get('doc_search_version'):
+            self.doc_search_version = s.get('doc_search_version')
+
     def callSymfony(self, command, quiet=False):
-        project_settings = self.view.settings().get('SymfonyCommander', {})
-        base_directory = ""
-        if project_settings:
-            base_directory = project_settings.get('base_directory')
-        if not base_directory:
+        self.loadSettings()
+        if not self.base_directory:
             #try to find it somewhere upwards:
             view_name = self.view.file_name()
             if view_name:
@@ -52,26 +70,24 @@ class SymfonyCommanderBase:
                         if file == "app" and os.path.isdir(dir_name + "/" + file):
                             #found an app dir
                             if os.path.exists(dir_name + "/" + file + '/console'):
-                                base_directory = dir_name
+                                self.base_directory = dir_name
                                 found_root = True
                     #travers up
                     old_dir = dir_name
                     dir_name = os.path.dirname(dir_name)
                     if dir_name == old_dir:
                         reached_end = True
-        if not base_directory:
+        if not self.base_directory:
             if not quiet:
                 self.output("Can't find the root directory of the symfony project. Please have a look at the README. You can find it here: https://github.com/pdaether/Sublime-SymfonyCommander")
             return
-        os.chdir(base_directory)
+        os.chdir(self.base_directory)
         # CMD:
-        s = sublime.load_settings("SymfonyCommander.sublime-settings")
-        php_command = s.get('php_command')
-        if not php_command:
+        if not self.php_command:
             command = "app/console " + command
         else:
-            command = php_command + " app/console " + command
-        result, e = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, cwd=base_directory).communicate()
+            command = self.php_command + " app/console " + command
+        result, e = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, cwd=self.base_directory).communicate()
         if e:
             return e
         else:
@@ -126,6 +142,18 @@ class SymfonyCommanderBase:
         panel.end_edit(edit)
         panel.set_read_only(True)
         self.view.window().run_command("show_panel", {"panel": "output." + panel_name})
+
+    def open_url(self, url):
+        url = url.replace(' ', '%20')
+        webbrowser.open_new_tab(url)
+
+    def getApiUrl(self, text):
+        self.loadSettings()
+        return self.symfony_api_url.format(v=self.api_search_version, s=text)
+
+    def getDocumentationUrl(self, text):
+        self.loadSettings()
+        return self.symfony_doc_url.format(v=self.doc_search_version, s=text)
 
 
 class SymfonyCommander(SymfonyCommanderBase, sublime_plugin.TextCommand):
@@ -259,3 +287,52 @@ class SymfonyCommanderAutocomplete(sublime_plugin.EventListener, SymfonyCommande
             snippets.append((val, val))
 
         return snippets
+
+
+class SymfonyCommanderSearchSelectionCommand(sublime_plugin.TextCommand, SymfonyCommanderBase):
+    def run(self, edit, source='api'):
+
+        if len(self.view.sel()) > 1:
+            return
+
+        for selection in self.view.sel():
+            if selection.empty():
+                text = self.view.word(selection)
+
+            text = self.view.substr(selection)
+
+            if source == 'api':
+                url = self.getApiUrl(text)
+            else:
+                url = self.getDocumentationUrl(text)
+
+            self.open_url(url)
+
+
+class SymfonyCommanderSearchInputCommand(sublime_plugin.WindowCommand, SymfonyCommanderBase):
+
+    source = 'api'
+
+    def run(self, source='api'):
+        self.view = self.window.active_view()
+        self.source = source
+        if source == 'api':
+            title = 'Search Symfony API for'
+        else:
+            title = 'Search Symfony Documentation for'
+
+        self.window.show_input_panel(title, '',
+            self.on_done, self.on_change, self.on_cancel)
+
+    def on_done(self, text):
+        if self.source == 'api':
+            url = self.getApiUrl(text)
+        else:
+            url = self.getDocumentationUrl(text)
+        self.open_url(url)
+
+    def on_change(self, input):
+        pass
+
+    def on_cancel(self):
+        pass

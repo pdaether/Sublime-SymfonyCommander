@@ -3,12 +3,47 @@
   "mnemonic": "t",
   "id": "tools",
   "children": 
-
     [{
     "id": "symfonycommandermenu",
     "caption": "SymfonyCommander",
     "children": [
         {
+            "caption": "Documentation",
+            "id": "symfonycommanderdocmenu",
+            "children" : [
+                {
+                    "caption": "Search Selection in API",
+                    "command": "symfony_commander_search_selection",
+                    "args": {
+                        "source": "api"
+                    }
+                }
+                ,{
+                    "caption": "Search Input in API",
+                    "command": "symfony_commander_search_input",
+                    "args": {
+                        "source": "api"
+                    }
+                },
+                { "caption": "-" }
+                ,{
+                    "caption": "Search Selection in Documentation",
+                    "command": "symfony_commander_search_selection",
+                    "args": {
+                        "source": "doc"
+                    }
+                }
+                ,{
+                    "caption": "Search Input in Documentation",
+                    "command": "symfony_commander_search_input",
+                    "args": {
+                        "source": "doc"
+                    }
+                }
+            ]
+        },
+        { "caption": "-" }
+        ,{
             "caption": "Cache",
             "id": "symfonycommandercachemenu",
             "children" : [
@@ -51,6 +86,11 @@
                 {"caption": "swiftmailer:spool:send", "command": "symfony_commander_execute", "args": {"command": "swiftmailer:spool:send"}},
                 {"caption": "swiftmailer:spool:send (with Args)", "command": "symfony_commander_execute_arguments", "args": {"command": "swiftmailer:spool:send", "arguments": "--message-limit=10 --time-limit=10"}}
             ]
+        }
+        ,{ "caption": "-" }
+        ,{
+            "caption": "Flush SymfonyCommander Cache",
+            "command": "symfony_commander_clear_cache"
         }
             
             

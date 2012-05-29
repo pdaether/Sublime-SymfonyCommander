@@ -119,4 +119,32 @@
         "caption": "SymfonyCommander Flush Cache",
         "command": "symfony_commander_clear_cache"
     }
+    ,{
+        "caption": "SymfonyCommander Search Selection in API",
+        "command": "symfony_commander_search_selection",
+        "args": {
+            "source": "api"
+        }
+    }
+    ,{
+        "caption": "SymfonyCommander Search Selection in Documentation",
+        "command": "symfony_commander_search_selection",
+        "args": {
+            "source": "doc"
+        }
+    }
+    ,{
+        "caption": "SymfonyCommander Search Input in Documentation",
+        "command": "symfony_commander_search_input",
+        "args": {
+            "source": "doc"
+        }
+    }
+    ,{
+        "caption": "SymfonyCommander Search Input in API",
+        "command": "symfony_commander_search_input",
+        "args": {
+            "source": "api"
+        }
+    }
 ]
