@@ -64,7 +64,9 @@ Alternative you can open the Command Palette in the menu (_Tools -> Command Pale
 You don't need to type the complete command (`SymfonyCommander...`) in the Command Palette to get to to the right command.
 For example if you type something short like `sccl` you get directly to the _SymfonyCommander cache:clear_ commands.
 
-### Call the Symfony commands through the context menu of an file.
+### Context menu or main menu
+
+You can call the Symfony commands through the context menu of an file or the main menu `Tools -> SymfonyCommander`.
 
 ![Contextmenu](http://pdaether.github.com/images/contextmenu.jpg "Contextmenu")
 
@@ -119,12 +121,18 @@ Settings can be configured with a `SymfonyCommander.sublime-settings` file in yo
 You can copy the one provided in this package.
 
 	{
-		"php_command": "/usr/bin/php"
+		"php_command": "/usr/bin/php",
+		"api_search_version": "master",
+		"doc_search_version": "master"
 	}
 
-With `php_command` you can define where SymfonyCommander can find the php binary. If it is `false` than SymfonyCommader calls the Symfony console directly without php binary (works well on OS X an Linux).
+**php_command:** With `php_command` you can define where SymfonyCommander can find the php binary. If it is `false` than SymfonyCommader calls the Symfony console directly without php binary (works well on OS X an Linux).
 Otherwise you can point `php_command` to the php binary path, for example `C:\php\php.exe` or `/usr/bin/php`.
 The default is `false`.
+
+**api_search_version:** This setting determines which version of the symfony api should be used for searching, could be `master` or something like `v2.0.14`. The default is `master`.
+
+**doc_search_version:** This setting determines which version of the symfony online documentation should be used for searching, could be either `master` or `2.0`. The default is `master`.
 
 
 ### Project specific settings

@@ -2,5 +2,11 @@
 	// if false, call "app/console" directly without explicit php binaray
 	// if set, use this command instead:
 	// 		e.g. "/usr/bin/php app/console" or "C:\php\php.exe app/console" or "php app/console"
-	"php_command": false
+	"php_command": false,
+	// for searching in the symfony api,
+	// could be "master" or something like "v2.0.14" 
+	"api_search_version": "master",
+	// for searching in the symfony online documentation,
+	// could be "master" or "2.0"
+	"doc_search_version": "master"
 }
