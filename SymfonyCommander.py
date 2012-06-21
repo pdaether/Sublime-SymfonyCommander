@@ -84,9 +84,9 @@ class SymfonyCommanderBase:
         os.chdir(self.base_directory)
         # CMD:
         if not self.php_command:
-            command = "app/console " + command
+            command = "php app/console --no-ansi " + command
         else:
-            command = self.php_command + " app/console " + command
+            command = self.php_command + " app/console --no-ansi " + command
         result, e = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, cwd=self.base_directory).communicate()
         if e:
             return e
