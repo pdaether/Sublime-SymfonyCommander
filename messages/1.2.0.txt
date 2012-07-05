@@ -1,0 +1,10 @@
+Version 1.2.0
+--------------
+
+This release adds the following features and bugfixes:
+
+
+CHANGES/FIXES:
+- Autocompletion for routing and service now checks for the prefix.
+- Autocompletion for routing and service is now limited to a string context in PHP, HTML and Twig to reduce clutter.
+- Use php from PATH by default and disable ANSI output (thanks to @Seldaek)
