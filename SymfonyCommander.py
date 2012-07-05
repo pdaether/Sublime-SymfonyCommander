@@ -283,7 +283,6 @@ class SymfonyCommanderAutocomplete(sublime_plugin.EventListener, SymfonyCommande
 
         # check is supported type of file
         syntax, _ = os.path.splitext(os.path.basename(view.settings().get('syntax')))
-        print syntax
         syntax = self.syntax_list.get(syntax)
         if syntax == None:
             return []
