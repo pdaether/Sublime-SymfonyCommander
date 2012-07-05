@@ -28,6 +28,12 @@ If you need some Symfony code snippets in addition to this package just install 
 
 ## Changelog
 
+**2012-07-05** (1.2.0)
+
+- Autocompletion for routing and service names now checks for the prefix.
+- Autocompletion for routing and service names is now limited to a string context in PHP, HTML and Twig to reduce clutter.
+- Use php from PATH by default and disable ANSI output (thanks to @Seldaek)
+
 **2012-05-24:** 
 
 - Restructuring and cleanup some code.
