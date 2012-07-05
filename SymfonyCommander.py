@@ -43,6 +43,16 @@ class SymfonyCommanderBase:
     symfony_api_url = 'http://api.symfony.com/{v}/index.html?q={s}&src=SymfonyCommander'
     symfony_doc_url = 'http://symfony.com/search?version={v}&q={s}&src=SymfonyCommander'
 
+    syntax_list = {"PHP": True, 'HTML': True, 'HTML (Twig)': True}
+
+    valid_scopes = (
+            'string.quoted.single.php',
+            'string.quoted.double.php',
+            'string.quoted.single.twig',
+            'string.quoted.single.twig',
+            'string.quoted.double.html',
+            'string.quoted.single.html')
+
     def loadSettings(self):
         if self.view:
             project_settings = self.view.settings().get('SymfonyCommander', {})
@@ -271,8 +281,25 @@ class SymfonyCommanderAutocomplete(sublime_plugin.EventListener, SymfonyCommande
     def on_query_completions(self, view, prefix, locations):
         self.view = view
 
+        # check is supported type of file
+        syntax, _ = os.path.splitext(os.path.basename(view.settings().get('syntax')))
+        print syntax
+        syntax = self.syntax_list.get(syntax)
+        if syntax == None:
+            return []
+
         # only complete single line/selection
         if len(locations) != 1:
+            return []
+
+        # only if in a string contenxt
+        scope = view.syntax_name(view.sel()[0].end())
+
+        is_valid_scope = False
+        for valid_scope in self.valid_scopes:
+            if scope.count(valid_scope):
+                is_valid_scope = True
+        if not is_valid_scope:
             return []
 
         self.loadRoutes()
@@ -281,10 +308,12 @@ class SymfonyCommanderAutocomplete(sublime_plugin.EventListener, SymfonyCommande
         snippets = []
 
         for val in SymfonyCommanderBase.routes:
-            snippets.append((val, val))
+            if val.startswith(prefix):
+                snippets.append((val, val))
 
         for val in SymfonyCommanderBase.containers:
-            snippets.append((val, val))
+            if val.startswith(prefix):
+                snippets.append((val, val))
 
         return snippets
 
