@@ -6,6 +6,8 @@ Additional you get some great little helpers for writing Symfony2 code.
 It provides the following features:
 
 - Switching between Template and the corresponding Controller/Action
+- Autocompletion for template, entitiy, routing and service names
+- Searching within the online api and the online documentation
 - Clear the cache
 - Warmup an empty cache
 - Assetic: Dump all assets to the filesystem

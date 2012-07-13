@@ -1,0 +1,10 @@
+Version 1.2.1
+--------------
+
+This release adds the following features and bugfixes:
+
+
+CHANGES/FIXES:
+- Autocompletion for template and entity names.
+- Optimized the autocompletion logic further
+- SymfonyCommander Autocompletion now works in YAML and XML files too
