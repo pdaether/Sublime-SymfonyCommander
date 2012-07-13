@@ -8,7 +8,7 @@ Additional you get some great little helpers for writing Symfony2 code.
 It provides the following features:
 
 - Switching between Template and the corresponding Controller/Action
-- Autocompletion for routing and service names
+- **Autocompletion for template, entitiy, routing and service names**
 - Searching within the online api and the online documentation
 - Clear the cache
 - Warmup an empty cache
@@ -27,6 +27,12 @@ If you want to be informed about new versions of this plugin just watch this rep
 If you need some Symfony code snippets in addition to this package just install [sublime-symfony2](https://github.com/raulfraile/sublime-symfony2). It is a great package for speed up your Symfony 2 development as well.
 
 ## Changelog
+
+**2012-07-13** (1.2.1)
+
+- Autocompletion for templates and entities
+- Optimized the autocompletion logig further
+- SymfonyCommander Autocompletion now works in YAML and XML files too
 
 **2012-07-05** (1.2.0)
 

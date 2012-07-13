@@ -39,11 +39,14 @@ class SymfonyCommanderBase:
 
     routes = []
     containers = []
+    entities = []
+    templates = []
+    common_snippets = []
 
     symfony_api_url = 'http://api.symfony.com/{v}/index.html?q={s}&src=SymfonyCommander'
     symfony_doc_url = 'http://symfony.com/search?version={v}&q={s}&src=SymfonyCommander'
 
-    syntax_list = {"PHP": True, 'HTML': True, 'HTML (Twig)': True}
+    syntax_list = {"PHP": True, 'HTML': True, 'HTML (Twig)': True, 'XML': True, 'YAML': True}
 
     valid_scopes = (
             'string.quoted.single.php',
@@ -51,13 +54,36 @@ class SymfonyCommanderBase:
             'string.quoted.single.twig',
             'string.quoted.single.twig',
             'string.quoted.double.html',
-            'string.quoted.single.html')
+            'string.quoted.single.html',
+            'string.quoted.single.xml',
+            'string.quoted.double.xml',
+            'source.yaml'
+    )
 
     def loadSettings(self):
         if self.view:
             project_settings = self.view.settings().get('SymfonyCommander', {})
             if project_settings:
                 self.base_directory = project_settings.get('base_directory')
+            if not self.base_directory:
+                #try to find it somewhere upwards:
+                view_name = self.view.file_name()
+                if view_name:
+                    dir_name = os.path.dirname(view_name)
+                    found_root = False
+                    reached_end = False
+                    while not found_root and not reached_end:
+                        for file in os.listdir(dir_name):
+                            if file == "app" and os.path.isdir(dir_name + "/" + file):
+                                #found an app dir
+                                if os.path.exists(dir_name + "/" + file + '/console'):
+                                    self.base_directory = dir_name
+                                    found_root = True
+                        #travers up
+                        old_dir = dir_name
+                        dir_name = os.path.dirname(dir_name)
+                        if dir_name == old_dir:
+                            reached_end = True
 
         s = sublime.load_settings("SymfonyCommander.sublime-settings")
         self.php_command = s.get('php_command')
@@ -68,25 +94,6 @@ class SymfonyCommanderBase:
 
     def callSymfony(self, command, quiet=False):
         self.loadSettings()
-        if not self.base_directory:
-            #try to find it somewhere upwards:
-            view_name = self.view.file_name()
-            if view_name:
-                dir_name = os.path.dirname(view_name)
-                found_root = False
-                reached_end = False
-                while not found_root and not reached_end:
-                    for file in os.listdir(dir_name):
-                        if file == "app" and os.path.isdir(dir_name + "/" + file):
-                            #found an app dir
-                            if os.path.exists(dir_name + "/" + file + '/console'):
-                                self.base_directory = dir_name
-                                found_root = True
-                    #travers up
-                    old_dir = dir_name
-                    dir_name = os.path.dirname(dir_name)
-                    if dir_name == old_dir:
-                        reached_end = True
         if not self.base_directory:
             if not quiet:
                 self.output("Can't find the root directory of the symfony project. Please have a look at the README. You can find it here: https://github.com/pdaether/Sublime-SymfonyCommander")
@@ -135,9 +142,86 @@ class SymfonyCommanderBase:
                 SymfonyCommanderBase.container_info.append([container_name, restwords.strip()])
                 SymfonyCommanderBase.containers.append(container_name)
 
+    def loadEntities(self, force=False):
+        self.loadSettings()
+        if not force and len(SymfonyCommanderBase.entities) > 0:
+            return
+        if not self.base_directory:
+            return
+        SymfonyCommanderBase.entities = []
+        src_dir = self.base_directory + "/src"
+        if not os.path.isdir(src_dir):
+            return
+        for file in os.listdir(src_dir):
+            company_dir = src_dir + "/" + file
+            prefix = file
+            if os.path.isdir(company_dir):
+                for file in os.listdir(company_dir):
+                    bundle_dir = company_dir + "/" + file
+                    prefix = prefix + file
+                    if self.common_snippets.count(prefix) < 1:
+                        self.common_snippets.append(prefix)
+                    if os.path.isdir(bundle_dir):
+                        entities_dir = bundle_dir + "/Entity"
+                        if os.path.isdir(entities_dir):
+                            for file in os.listdir(entities_dir):
+                                file_match = re.search(r'^((.)(?!Repository))*\.php$', file)
+                                if file_match:
+                                    entity_name_match = re.search(r'^(.*)\.php$', file)
+                                    SymfonyCommanderBase.entities.append(entity_name_match.group(1))
+                                    SymfonyCommanderBase.entities.append(prefix + ':' + entity_name_match.group(1))
+
+    def loadTemplates(self, force=False):
+        self.loadSettings()
+        if not force and len(SymfonyCommanderBase.templates) > 0:
+            return
+        if not self.base_directory:
+            return
+        SymfonyCommanderBase.templates = []
+        src_dir = self.base_directory + "/src"
+        if not os.path.isdir(src_dir):
+            return
+        for file in os.listdir(src_dir):
+            company_dir = src_dir + "/" + file
+            prefix = file
+            if os.path.isdir(company_dir):
+                for file in os.listdir(company_dir):
+                    bundle_dir = company_dir + "/" + file
+                    prefix = prefix + file
+                    #the short identifier of the bundle:
+                    if self.common_snippets.count(prefix) < 1:
+                        self.common_snippets.append(prefix)
+                    if os.path.isdir(bundle_dir):
+                        tpl_dir = bundle_dir + "/Resources/views"
+                        if os.path.isdir(tpl_dir):
+                            results = self.getTemplateNames(tpl_dir, prefix + ':', [])
+                            for result in results:
+                                SymfonyCommanderBase.templates.append(result)
+                            # for file in os.listdir(tpl_dir):
+                            #     file_match = re.search(r'^(.*)\.(twig|php)$', file)
+                            #     if file_match:
+                            #         SymfonyCommanderBase.templates.append(file_match.group(0))
+                            #         SymfonyCommanderBase.templates.append(prefix + ':' + file_match.group(0))
+
+    def getTemplateNames(self, dir, prefix, results):
+        for file in os.listdir(dir):
+            file_match = re.search(r'^(.*)\.(twig|php)$', file)
+            if file_match:
+                # results.append(file_match.group(0))
+                results.append(prefix + ':' + file_match.group(0))
+            if os.path.isdir(dir + "/" + file):
+                if re.match(r'.*:$', prefix):
+                    results = self.getTemplateNames(dir + "/" + file, prefix + file, results)
+                else:
+                    results = self.getTemplateNames(dir + "/" + file, prefix + '/' + file, results)
+        return results
+
     def clearCache(self):
         SymfonyCommanderBase.containers = []
         SymfonyCommanderBase.routes = []
+        SymfonyCommanderBase.entities = []
+        SymfonyCommanderBase.templates = []
+        SymfonyCommanderBase.common_snippets = []
 
     def output(self, value):
         self.multi_line_output(value)
@@ -280,7 +364,6 @@ class SymfonyCommanderAutocomplete(sublime_plugin.EventListener, SymfonyCommande
 
     def on_query_completions(self, view, prefix, locations):
         self.view = view
-
         # check is supported type of file
         syntax, _ = os.path.splitext(os.path.basename(view.settings().get('syntax')))
         syntax = self.syntax_list.get(syntax)
@@ -301,20 +384,64 @@ class SymfonyCommanderAutocomplete(sublime_plugin.EventListener, SymfonyCommande
         if not is_valid_scope:
             return []
 
+        # check the content of the actual scope and
+        # optimize the completions if needed
+        # scope_content = view.substr(view.extract_scope(view.sel()[0].end()))
+        current_scope_region = view.extract_scope(view.sel()[0].end())
+        scope_context_region = sublime.Region(current_scope_region.begin(), view.sel()[0].end())
+        scope_content = view.substr(scope_context_region)
+        match_prefix = re.search(r"([\w\.:]*)$", scope_content)
+        if match_prefix:
+            search_prefix = match_prefix.group(1)
+        else:
+            search_prefix = False
         self.loadRoutes()
         self.loadContainer()
+        self.loadEntities()
+        self.loadTemplates()
 
         snippets = []
 
-        for val in SymfonyCommanderBase.routes:
+        for val in SymfonyCommanderBase.common_snippets:
             if val.startswith(prefix):
                 snippets.append((val, val))
+
+        for val in SymfonyCommanderBase.routes:
+            new_snippet = self.checkPrefix(prefix, search_prefix, val, ' [Route]')
+            if new_snippet:
+                snippets.append(new_snippet)
 
         for val in SymfonyCommanderBase.containers:
-            if val.startswith(prefix):
-                snippets.append((val, val))
+            new_snippet = self.checkPrefix(prefix, search_prefix, val, ' [Service]')
+            if new_snippet:
+                snippets.append(new_snippet)
+
+        for val in SymfonyCommanderBase.entities:
+            new_snippet = self.checkPrefix(prefix, search_prefix, val, ' [Entity]')
+            if new_snippet:
+                snippets.append(new_snippet)
+
+        for val in SymfonyCommanderBase.templates:
+            new_snippet = self.checkPrefix(prefix, search_prefix, val, ' [Tpl]')
+            if new_snippet:
+                snippets.append(new_snippet)
 
         return snippets
+
+    def checkPrefix(self, prefix, search_prefix, val, tipstring):
+        if search_prefix and search_prefix != prefix:
+            if val.startswith(search_prefix):
+                if not re.match(r".*[\.\:]$", search_prefix):
+                    replace_str = re.sub(r'((.*)[\:\.])(.(?![\:\.]))*$', r'\1', search_prefix)
+                    # insert_val = re.sub('[\:\.](.(?![\:\.]))*$', '', val)
+                    insert_val = val.replace(replace_str, '', 1)
+                else:
+                    insert_val = val.replace(search_prefix, '', 1)
+                return (val + tipstring, insert_val)
+        else:
+            if val.startswith(prefix):
+                return (val + tipstring, val)
+        return False
 
 
 class SymfonyCommanderSearchSelectionCommand(sublime_plugin.TextCommand, SymfonyCommanderBase):
