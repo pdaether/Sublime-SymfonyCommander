@@ -250,6 +250,7 @@ class SymfonyCommanderBase:
         return self.symfony_doc_url.format(v=self.doc_search_version, s=text)
 
     def is_enabled(self):
+        self.loadSettings()
         return self.base_directory
 
 
@@ -266,7 +267,7 @@ class SymfonyCommander(SymfonyCommanderBase, sublime_plugin.TextCommand):
 class SymfonyCommanderClearCacheCommand(SymfonyCommander):
     def run(self, edit):
         self.clearCache()
-        
+
     def is_enabled(self):
         return True
 
@@ -355,6 +356,15 @@ class SymfonyCommanderSwitchFileCommand(SymfonyCommander, sublime_plugin.TextCom
                 cf = view.substr(r)
                 break
         return cf
+
+    def is_enabled(self):
+        filename = self.view.file_name()
+        if re.search(r'(.+)[/\\](.+)Controller.php', filename):
+            return True
+        elif re.search(r'(.+)[/\\](.+).html.twig', filename):
+            return True
+        else:
+            return False
 
 
 class SymfonyEvent(sublime_plugin.EventListener, SymfonyCommanderBase):
@@ -468,6 +478,15 @@ class SymfonyCommanderSearchSelectionCommand(sublime_plugin.TextCommand, Symfony
                 url = self.getDocumentationUrl(text)
 
             self.open_url(url)
+
+    def is_enabled(self):
+        if len(self.view.sel()) > 1:
+            return False
+        for selection in self.view.sel():
+            if selection.empty():
+                return False
+            else:
+                return True
 
 
 class SymfonyCommanderSearchInputCommand(sublime_plugin.WindowCommand, SymfonyCommanderBase):
