@@ -249,6 +249,9 @@ class SymfonyCommanderBase:
         self.loadSettings()
         return self.symfony_doc_url.format(v=self.doc_search_version, s=text)
 
+    def is_enabled(self):
+        return self.base_directory
+
 
 class SymfonyCommander(SymfonyCommanderBase, sublime_plugin.TextCommand):
 
@@ -263,6 +266,9 @@ class SymfonyCommander(SymfonyCommanderBase, sublime_plugin.TextCommand):
 class SymfonyCommanderClearCacheCommand(SymfonyCommander):
     def run(self, edit):
         self.clearCache()
+        
+    def is_enabled(self):
+        return True
 
 
 class SymfonyCommanderExecuteCommand(SymfonyCommander):
