@@ -84,9 +84,17 @@
         }
         ,{ "caption": "-" }
         ,{
+            "caption": "Testing",
+            "id": "symfonycommandertestingmenu",
+            "children" : [
+                {"caption": "Run all Tests", "command": "symfony_commander_run_test", "args": {"path": ""}}
+                ,{"caption": "Run all Tests for current bundle", "command": "symfony_commander_run_test_bundle", "args": {"path": ""}}
+            ]
+        }
+        ,{ "caption": "-" }
+        ,{
             "caption": "Flush SymfonyCommander Cache",
             "command": "symfony_commander_clear_cache"
-        }   
-            
+        }
     ]
 }]

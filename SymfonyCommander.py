@@ -107,6 +107,25 @@ class SymfonyCommanderBase:
         if s.get('doc_search_version'):
             self.doc_search_version = s.get('doc_search_version')
 
+    def getCurrentBundleFolder(self):
+        view_name = self.view.file_name()
+        bundle_folder = False
+        if view_name:
+            dir_name = os.path.dirname(view_name)
+            found_folder = False
+            reached_end = False
+            while not found_folder and not reached_end:
+                for file in os.listdir(dir_name):
+                    if file.endswith('Bundle') and os.path.isdir(dir_name + "/" + file):
+                        bundle_folder = dir_name
+                        found_folder = True
+                #travers up
+                old_dir = dir_name
+                dir_name = os.path.dirname(dir_name)
+                if dir_name == old_dir:
+                    reached_end = True
+        return bundle_folder
+
     def callSymfony(self, command, quiet=False):
         self.loadSettings()
         if not self.base_directory:
@@ -124,6 +143,21 @@ class SymfonyCommanderBase:
             return e
         else:
             if not result and not quiet:
+                result = "Finished " + command
+            return result
+
+    def callPhpunit(self, command):
+        self.loadSettings()
+        if not self.base_directory:
+            self.output("Can't find the root directory of the symfony project. Please have a look at the README. You can find it here: https://github.com/pdaether/Sublime-SymfonyCommander")
+            return
+        os.chdir(self.base_directory)
+        command = "phpunit " + command
+        result, e = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, cwd=self.base_directory).communicate()
+        if e:
+            return e
+        else:
+            if not result:
                 result = "Finished " + command
             return result
 
@@ -534,3 +568,23 @@ class SymfonyCommanderSearchInputCommand(sublime_plugin.WindowCommand, SymfonyCo
 
     def on_cancel(self):
         pass
+
+
+class SymfonyCommanderRunTestCommand(sublime_plugin.TextCommand, SymfonyCommanderBase):
+    def run(self, edit, path=''):
+        self.output(self.callPhpunit(' -c app ' + path))
+
+    def is_enabled(self):
+        self.loadSettings()
+        return self.base_directory
+
+
+class SymfonyCommanderRunTestBundleCommand(sublime_plugin.TextCommand, SymfonyCommanderBase):
+    def run(self, edit, path=''):
+        bundle_folder = self.getCurrentBundleFolder()
+        if bundle_folder:
+            self.output(self.callPhpunit(' -c app ' + bundle_folder))
+
+    def is_enabled(self):
+        self.loadSettings()
+        return self.getCurrentBundleFolder()
