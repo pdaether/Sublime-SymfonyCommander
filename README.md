@@ -1,6 +1,8 @@
 # SymfonyCommander
 
-**_Integration of the Symfony 2 console right into Sublime Text 2_**
+**_SymfonyCommnader is a small Sublime Text 2 package that transforms your editor of choice into a lightweight Symfony 2 IDE_**
+
+Get an overview of SymfonyCommander on the [project page](http://www.pd-digital.de/symfonycommander/).
 
 This [Sublime Text 2](http://sublimetext.com/) package integrates the most common [Symfony 2](http://www.symfony.com) console commands right into your _lovely editor of choice &trade;_.
 Additional you get some great little helpers for writing Symfony2 code.
@@ -20,6 +22,7 @@ It provides the following features:
 - Doctrine: Clear result cache
 - Doctrine: Clear query cache
 - Doctrine: Clear meta cache
+- Run testcases in Sublime Text
 
 More commands are on the way.
 If you want to be informed about new versions of this plugin just watch this repro on github or watch out for some [tweets](https://twitter.com/#!/pdaether).
@@ -27,6 +30,12 @@ If you want to be informed about new versions of this plugin just watch this rep
 If you need some Symfony code snippets in addition to this package just install [sublime-symfony2](https://github.com/raulfraile/sublime-symfony2). It is a great package for speed up your Symfony 2 development as well.
 
 ## Changelog
+
+**2012-09-22** (1.2.2)
+
+- Run testcases in Sublime Text
+- Enable commands only when relevant (thanks to @leek)
+- new [project page](http://www.pd-digital.de/symfonycommander/)
 
 **2012-07-13** (1.2.1)
 

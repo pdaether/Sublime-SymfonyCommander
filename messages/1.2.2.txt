@@ -1,0 +1,11 @@
+Version 1.2.2
+--------------
+
+This release adds the following features and bugfixes:
+
+
+CHANGES/FIXES:
+
+- Run testcases in Sublime Text
+- Enable commands only when relevant (thanks to @leek)
+- new project page http://www.pd-digital.de/symfonycommander/
